@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\loginController;
 use App\Http\Controllers\Api\Dashboard;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Api\TransactionController;
-
+use App\Http\Controllers\Api\Projects;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,3 +34,4 @@ Route::middleware('auth:api')->group(function () {
 });
 
     
+Route::get('pojects', [Projects::class, 'index']);
