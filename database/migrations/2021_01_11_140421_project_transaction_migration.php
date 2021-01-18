@@ -15,9 +15,12 @@ class ProjectTransactionMigration extends Migration
     {
         Schema::create('projectTransactions', function (Blueprint $table) {
             $table->bigIncrements('project_transaction_id');
-            $table->string('name');
-            $table->string('project_name');
+            $table->string('transaction_name');
             $table->integer('projects_id');
+            $table->integer('transaction_ammount');
+            $table->integer('transaction_type');
+            $table->integer('transaction_by');
+            $table->datetime('transaction_date');
         });
     }
 

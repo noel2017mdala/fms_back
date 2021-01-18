@@ -11,4 +11,5 @@ class projectsTransactionModel extends Model
 
     public $timestamps = false;
     public $guarded = [];
+    public $table = 'projectTransactions';
 }

@@ -15,7 +15,7 @@ class ProjectsMigration extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('projects_id');
-            $table->string('projects_nmae');
+            $table->string('projects_name');
             $table->integer('created_by');
             $table->datetime('date_created');
         });
