@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\TransactionModel as Transaction;
 use Illuminate\Support\Carbon;
 
@@ -31,6 +32,57 @@ class TransactionController extends Controller
         ], 404);
     }
 
+    }
+    public function createTransaction(Request $request){
+         
+         $validate = $request->validate([
+            'transaction_name' => 'required',
+            'transaction_ammount' => 'required',
+            'transaction_type'     => 'required',
+            'transaction_by' => 'required'
+    
+        ]);
+        $checkTransactionType = $request->all();
+        
+        if($validate){
+
+            if($checkTransactionType['transaction_type'] === 'income'){
+                
+                $createTransaction = Transaction::create([
+                    'transaction_name' => $request->transaction_name,
+                    'transaction_ammount' => $request->transaction_ammount,
+                    'transaction_type' => 0,
+                    'transaction_by' => $request->transaction_by,
+                    'transaction_date' => Carbon::now(),
+                ]);
+
+                if($createTransaction){
+                    return response()->json([
+                        'state' => 1,
+                        'msg' => 'transaction created successfully'
+                     ]);
+                }
+            }else if($checkTransactionType['transaction_type'] === 'expenditure'){
+                $createTransaction = Transaction::create([
+                    'transaction_name' => $request->transaction_name,
+                    'transaction_ammount' => $request->transaction_ammount,
+                    'transaction_type' => 1,
+                    'transaction_by' => $request->transaction_by,
+                    'transaction_date' => Carbon::now(),
+                ]);
+
+                if($createTransaction){
+                    return response()->json([
+                        'state' => 1,
+                        'msg' => 'transaction created successfully'
+                     ]);
+                }
+            }
+           
+
+        }
+        
+       
     }
 
     public function getEarnings(Request $request){

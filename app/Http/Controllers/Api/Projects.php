@@ -10,8 +10,8 @@ use Illuminate\Support\Carbon;
 class Projects extends Controller
 {
     public function index(){
-        if(true){
-        $projects =  projectsModel::all();
+        if(auth()->user()){
+        $projects =  projectsModel::limit('3')->get();
         if(isset($projects)){
             return response()->json([
                 'state' => 1,
@@ -70,7 +70,19 @@ class Projects extends Controller
 
     }
 
-    public function getTransactions(){
+    public function deletsProject($res){
+        $getProject = projectsModel::findorfail($id);
+        if($res === true){
+            $getProject->delete();
+            return responce()->json([
+                'state' => 1,
+                'msg' => 'project deleted succssfully',
+            ]);
+        }
+    }
 
+    public function projectTransactions(){
+        $transaction = projectsModel::find(1);
+        return $transaction->transactions;
     }
 }

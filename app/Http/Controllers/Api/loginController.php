@@ -9,6 +9,11 @@ use App\Models\User;
 
 class loginController extends Controller
 {
+
+    public function index(){
+        return User::get(['id', 'first_name', 'last_name','email']);
+        
+    }
    public function register(Request $request){
     $validate = $request->validate([
         'first_name' => 'required|min:3',
@@ -49,7 +54,7 @@ class loginController extends Controller
 
     $validate = $request->validate([
         'email' => 'required|email',
-        'password' => 'required|min:6',
+        'password' => 'required',
     ]);
 
         if($validate){
@@ -62,11 +67,13 @@ class loginController extends Controller
             if(auth()->attempt($userData)){
                 $user =  $request->user();
                 $createToken = $user->createToken('user_auth_token')->accessToken;
+                $userInfo = User::get(['id', 'first_name', 'last_name','email']);
 
                 return response()->json([
                     'state' => 1,
                     'user' => 'Bearer',
                     'token' => $createToken,
+                    'user_info' => $userInfo,
                     'msg' => 'access token',
                 ], 200);
             }else{
