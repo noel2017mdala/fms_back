@@ -11,4 +11,5 @@ class TransactionModel extends Model
     
     protected $table = 'transactions';
     protected $guarded = [];
+    protected $hidden = ['updated_at', 'created_at'];
 }

@@ -10,23 +10,52 @@ use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
-    public function index(){
+    public function index(Request $request, $param ='', $id = ''){
+
+        /*
+        checks if the user is authenticated
+        */
        if(auth()->user()){
-        $transaction =  Transaction::limit('3')->get();
-        if(!empty($transaction)){
+        if(!empty($param && $id)){
 
-       return response()->json([
-            'state' => 1,
-            'transaction' => $transaction,
-            ], 200);
-    } else{
+            if($param === 'limit'){
 
-        return response()->json([
-            'state' => 0,
-            'msg' => '',
-        ], 404);
-    }
-       }else{
+        //get transactions with a limit of 2
+        $transaction =  Transaction::where('transaction_by', $id)->limit(2)->get();
+    if(!empty($transaction)){
+   return response()->json([
+        'state' => 1,
+        'transaction' => $transaction,
+        ], 200);
+} else{
+
+    return response()->json([
+        'state' => 0,
+        'msg' => '',
+    ], 404);
+}
+            }
+        }
+            /*
+                Gets all transactions made by that user
+                */
+
+         if($param === 'all' && !empty($id)){
+            
+            $transaction =  Transaction::where('transaction_by', $id)->get();
+        
+            return response()->json([
+                'state' => 1,
+                'transactions' => $transaction,
+            ]);
+        }else{
+            return response()->json([
+                'msg' => 'page not found',
+            ], 404);
+        }
+       }
+       
+       else{
         return response()->json([
             'msg' => 'page not found',
         ], 404);
@@ -77,6 +106,11 @@ class TransactionController extends Controller
                         'msg' => 'transaction created successfully'
                      ]);
                 }
+            }else{
+                return response()->json([
+                    'state' => 0,
+                    'msg' => 'Failed to create transaction',
+                 ]);
             }
            
 
@@ -85,55 +119,86 @@ class TransactionController extends Controller
        
     }
 
-    public function getEarnings(Request $request){
+    public function getEarnings($id){
         
         if(auth()->user()){
 
-            $earnings = Transaction::where('transaction_type', 0)->limit(3)->get();
-            // return $earnings;
-           if(!empty($earnings)){
-            return response()->json([
-                'state' => 1,
-                'transaction' => $earnings,
-                ], 200);
-        } else{
+            if(!empty($id)){
+                $earnings = Transaction::where([
+                    'transaction_type'=> 0,
+                    'transaction_by' => $id,
+                ])->limit(2)->get();
+                // return $earnings;
+               if(!empty($earnings)){
+                return response()->json([
+                    'state' => 1,
+                    'transaction' => $earnings,
+                    ], 200);
+            } else{
+        
+                return response()->json([
+                    'state' => 0,
+                    'msg' => '',
+                ]);
+            }
     
-            return response()->json([
-                'state' => 0,
-                'msg' => '',
-            ]);
-        }
-
-        }else{
-            return response()->json([
-                'msg' => 'page not found',
-            ], 404);
-        }
-      
+            }else{
+                return response()->json([
+                    'msg' => 'page not found',
+                ], 404);
+            }
+            } 
 }
 
-public function getExpenses(){
+public function getExpenses($id){
    if(auth()->user()){
-    $expense = Transaction::where('transaction_type', 1)->limit(3)->get();
-    if(!empty($expense)){
-        return response()->json([
-            'state' => 1,
-            'transaction' => $expense,
-        ], 200);
-    }else{
-        
-        return response()->json([
-            'state' => 0,
-            'msg' => ''
-        ]);
-
-        }
-
-        }else{
+       if(!empty($id)){
+        $expense = Transaction::where([
+            'transaction_type'=> 1,
+            'transaction_by' => $id,
+        ])->limit(2)->get();
+        if(!empty($expense)){
             return response()->json([
-                'msg' => 'page not found',
-            ], 404);
-        }
-   }
+                'state' => 1,
+                'transaction' => $expense,
+            ], 200);
+        }else{
+            
+            return response()->json([
+                'state' => 0,
+                'msg' => ''
+            ]);
+    
+            }
+    
+            }else{
+                return response()->json([
+                    'msg' => 'page not found',
+                ], 404);
+            }
+       }
+       }
 
+       public function deleteTransaction($user = '',$id= ''){
+        if(auth()->user()){
+                
+                if(!empty($user && $id)){
+                    $delete = Transaction::find($id);
+                    $delete->delete();
+                    
+                  if($delete){
+                    return response()->json([
+                        'state' => 1,
+                        'msg' => 'activity deleted'
+                    ]);
+                  }
+                }else{
+                    return response()->json([
+                        'state' => 0,
+                        'msg' => ''
+                    ]);
+                }
+            
+        }
+       }
 }

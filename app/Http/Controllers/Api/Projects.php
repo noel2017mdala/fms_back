@@ -28,19 +28,30 @@ class Projects extends Controller
     }
 
     public function createProject(Request $request){
-       
+        
+        if(auth()->user()){
         $createProject = projectsModel::create([
-            'projects_name' => 'service my car',
-            'created_by'    =>  100,
+            'projects_name' =>$request->userinput['project_name'],
+            'created_by'    =>  $request->id,
             'date_created'  => Carbon::now(),
         ]);
         
         if($createProject){
-            return 'project created successfully';
+            return response()->json([
+                'state' => 1,
+                'msg' => 'project created succcessfully', 
+            ], 200);
+        }else{
+            return response()->json([
+                'state' => 0,
+                'msg' => 'failed to create a project', 
+            ], 401);
         }
+    }
     }
 
     public function editProject(Request $request, $id) {
+        
         $getProject = projectsModel::findorfail($id);
         $validate = $request->validate([
             'project_name' => '',
