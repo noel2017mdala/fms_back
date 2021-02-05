@@ -19,27 +19,28 @@ Route::post('register', [loginController::class, 'register']);
 Route::post('login',[loginController::class, 'login'])->name('login');
 
 Route::middleware('auth:api')->group(function () {
-    // Route::get('dashboard', [Dashboard::class, 'index']);
     
+    //Activity transaction
     Route::post('createtransaction', [TransactionController::class, 'createTransaction']);
     Route::get('earnings/{id?}', [TransactionController::class, 'getEarnings']);
     Route::get('expences/{id?}', [TransactionController::class, 'getExpenses']);
     Route::get('transaction/{param?}/{id?}', [TransactionController::class, 'index']);
     Route::get('earnings/{id?}', [TransactionController::class, 'getEarnings']);
-    Route::get('deletetransaction/{user?}/{id?}', [TransactionController::class, 'deleteTransaction']);
-
-    // projects routes
-    Route::post('createproject', [Projects::class, 'createProject']);
+    Route::get('deletetransaction/{userid?}/{transactionid?}', [TransactionController::class, 'deleteTransaction']);    
 });
 
 Route::middleware('auth:api')->group(function (){
-    Route::get('projects', [Projects::class, 'index']);
-});
 
+        // projects routes
+    Route::post('createproject', [Projects::class, 'createProject']);
+    Route::get('projects', [Projects::class, 'index']);
+    Route::get('viewprojects/{id?}', [Projects::class, 'listProjects']);
+    Route::get('deleteproject/{id?}', [Projects::class, 'deletsProject']);
+});
 
 
 // Route::get('', [Transaction::class, 'createTransaction']);
 // Route::get('transactions', [Transaction::class, 'index']);
 // Route::get('projecttransactions', [Projects::class, 'projectTransactions']);
 
-Route::post('user',[loginController::class, 'index']);
+// Route::post('user',[loginController::class, 'index']);

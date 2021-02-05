@@ -11,10 +11,11 @@ class Projects extends Controller
 {
     public function index(){
         if(auth()->user()){
-        $projects =  projectsModel::limit('3')->get();
+        $projects =  projectsModel::limit(2)->get();
         if(isset($projects)){
             return response()->json([
                 'state' => 1,
+                'res' => 'red',
                 'projects' =>$projects,
 
             ], 200);
@@ -24,6 +25,24 @@ class Projects extends Controller
                 'msg' => '',
             ], 404);
         }
+        }
+    }
+
+    public function listProjects(int $id){
+        if(auth()->user()){
+            $projects =  projectsModel::where('created_by', $id)->get();
+            if(isset($projects)){
+                return response()->json([
+                    'state' => 1,
+                    'projects' =>$projects,
+    
+                ], 200);
+            }else{
+                return response()->json([
+                    'state' => 0,
+                    'msg' => '',
+                ], 404);
+            }
         }
     }
 
@@ -81,14 +100,19 @@ class Projects extends Controller
 
     }
 
-    public function deletsProject($res){
-        $getProject = projectsModel::findorfail($id);
-        if($res === true){
+    public function deletsProject($id){
+        if(auth()->user()){
+            $getProject = projectsModel::find($id);
             $getProject->delete();
-            return responce()->json([
+            return response()->json([
                 'state' => 1,
                 'msg' => 'project deleted succssfully',
-            ]);
+            ], 200);
+        }else{
+            return response()->json([
+                'state' => 0,
+                'msg' => 'page not found',
+            ], 401);
         }
     }
 

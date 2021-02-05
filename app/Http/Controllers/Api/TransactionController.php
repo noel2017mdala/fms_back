@@ -195,7 +195,7 @@ public function getExpenses($id){
                 }else{
                     return response()->json([
                         'state' => 0,
-                        'msg' => ''
+                        'msg' => 'demo'
                     ]);
                 }
             
