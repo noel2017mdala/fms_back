@@ -15,7 +15,6 @@ class Projects extends Controller
         if(isset($projects)){
             return response()->json([
                 'state' => 1,
-                'res' => 'red',
                 'projects' =>$projects,
 
             ], 200);
