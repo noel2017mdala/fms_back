@@ -8,6 +8,7 @@ use Laravel\Passport\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\Projects;
 use App\Http\Controllers\Api\projectsTransaction as Transaction;
+use App\Http\Controllers\Api\AmountController;
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -38,6 +39,15 @@ Route::middleware('auth:api')->group(function (){
     Route::get('deleteproject/{id?}', [Projects::class, 'deletsProject']);
 });
 
+// User amount middleware
+Route::middleware(['auth:api'])->group(function () {
+    
+});
+
+
+Route::get('getamounttransactions/{id?}', [AmountController::class, 'index']);
+Route::post('createamount', [AmountController::class, 'create_transaction']);
+// Route::get('getamount', [AmountController::class, 'getAmount']);
 
 // Route::get('', [Transaction::class, 'createTransaction']);
 // Route::get('transactions', [Transaction::class, 'index']);
