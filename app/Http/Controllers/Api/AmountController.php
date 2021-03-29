@@ -12,30 +12,36 @@ class AmountController extends Controller
 {
     public function index(int $id){
         
-         $amountTransaction = UserAmount::where('user_id', $id)->get();
         $amount = Amount::where('user_id', $id)->get();
 
         return response()->json([
             'state' => 1,
-            'amount_transaction' =>  $amountTransaction,
             'amount' => $amount
         ]); 
 
    
     }
 
+
+    public function getAmountTransaction(int $id){
+        
+         $amountTransaction = UserAmount::where('user_id', $id)->get();
+        return response()->json([
+            'state' => 1,
+            'amount_transaction' =>  $amountTransaction,
+        ]); 
+    }
     
     public function create_transaction(Request $request){
         
-      
-
-        // $createProject = Amount::create([
-        //     'user_id' =>1,
-        //     'Amount' =>  0,
-        //     'transaction_date'  => Carbon::now(),
-        // ]);
+        $createProject = Amount::create([
+            'user_id' =>1,
+            'Amount' =>  0,
+            'transaction_date'  => Carbon::now(),
+        ]);
     
-        //  return;
+         return;
+         
         $user_id  = $request['id'];
         $data =  Amount::where('user_id', $user_id)->get();
         

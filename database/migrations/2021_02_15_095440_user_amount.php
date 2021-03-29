@@ -17,6 +17,7 @@ class UserAmount extends Migration
             $table->bigIncrements('user_Amount_id');
             $table->integer('user_id');
             $table->integer('prev_Amount');
+            $table->integer('transaction_id');
             $table->string('date_value');
             $table->datetime('transaction_date');
         });

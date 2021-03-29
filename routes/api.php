@@ -27,8 +27,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('expences/{id?}', [TransactionController::class, 'getExpenses']);
     Route::get('transaction/{param?}/{id?}', [TransactionController::class, 'index']);
     Route::get('earnings/{id?}', [TransactionController::class, 'getEarnings']);
-    Route::get('deletetransaction/{userid?}/{transactionid?}', [TransactionController::class, 'deleteTransaction']);    
+    Route::post('deletetransaction', [TransactionController::class, 'deleteTransaction']);    
 });
+
 
 Route::middleware('auth:api')->group(function (){
 
@@ -36,17 +37,20 @@ Route::middleware('auth:api')->group(function (){
     Route::post('createproject', [Projects::class, 'createProject']);
     Route::get('projects', [Projects::class, 'index']);
     Route::get('viewprojects/{id?}', [Projects::class, 'listProjects']);
-    Route::get('deleteproject/{id?}', [Projects::class, 'deletsProject']);
+    Route::get('deleteproject/{id?}', [Projects::class, 'deleteProject']);
 });
+
 
 // User amount middleware
 Route::middleware(['auth:api'])->group(function () {
-    
+
+    Route::get('getamountbalance/{id?}', [AmountController::class, 'index']);
+    Route::get('getAmount/{id?}', [AmountController::class, 'getAmountTransaction']);
 });
 
-
-Route::get('getamounttransactions/{id?}', [AmountController::class, 'index']);
 Route::post('createamount', [AmountController::class, 'create_transaction']);
+
+
 // Route::get('getamount', [AmountController::class, 'getAmount']);
 
 // Route::get('', [Transaction::class, 'createTransaction']);

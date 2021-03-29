@@ -99,7 +99,7 @@ class Projects extends Controller
 
     }
 
-    public function deletsProject($id){
+    public function deleteProject($id){
         if(auth()->user()){
             $getProject = projectsModel::find($id);
             $getProject->delete();
