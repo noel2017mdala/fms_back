@@ -168,7 +168,7 @@ class TransactionController extends Controller
                         return response()->json([
                             'state' => 0,
                             'msg' => 'Failed to create transaction'
-                        ], 404);
+                        ], 201);
                     }
                 
             }else{
@@ -272,17 +272,28 @@ class TransactionController extends Controller
 
         // checks if the transaction type is an income
         if($getTransactionType->transaction_type === 0){
+        
             
-            
-            $createAmount = Amount::find($request->userData['id']);
-            $createAmount->update(['Amount' => $userBalance - $getTransactionType->transaction_ammount]);
-            $getTransaction = DB::delete('delete from User_Amount_transactions where user_id = ? AND transaction_id = ?', [$request->userData['id'],$request->id]);
-            $getTransactionType->delete();
+            if($userBalance - $getTransactionType->transaction_ammount >= 0){
+                
+                $createAmount = Amount::find($request->userData['id']);
+                $createAmount->update(['Amount' => $userBalance - $getTransactionType->transaction_ammount]);
+                $getTransaction = DB::delete('delete from User_Amount_transactions where user_id = ? AND transaction_id = ?', [$request->userData['id'],$request->id]);
+                $getTransactionType->delete();
+    
+                return response()->json([
+                    'state' => 1,
+                    'msg' => 'activity deleted'
+                ], 201);
 
-            return response()->json([
-                'state' => 1,
-                'msg' => 'activity deleted'
-            ], 201);
+            }else{
+
+                return response()->json([
+                    'state' => 0,
+                    'msg' => 'Failed to delete activity'
+                ], 201);
+            }
+           
             
             // checks if the transaction type is an expenditure
         }else if($getTransactionType->transaction_type === 1){
