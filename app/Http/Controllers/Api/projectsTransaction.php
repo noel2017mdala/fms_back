@@ -25,7 +25,7 @@ class projectsTransaction extends Controller
         ]);
         
         if($createTransaction){
-            return responce()->json([
+            return response()->json([
                 'state' => 1,
                 'msg' => 'transaction crated successfully'
              ]);

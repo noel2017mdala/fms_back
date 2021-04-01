@@ -37,7 +37,7 @@ Route::middleware('auth:api')->group(function (){
     Route::post('createproject', [Projects::class, 'createProject']);
     Route::get('projects', [Projects::class, 'index']);
     Route::get('viewprojects/{id?}', [Projects::class, 'listProjects']);
-    Route::get('deleteproject/{id?}', [Projects::class, 'deleteProject']);
+    Route::post('deleteproject', [Projects::class, 'deleteProject']);
 });
 
 

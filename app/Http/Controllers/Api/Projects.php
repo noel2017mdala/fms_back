@@ -11,7 +11,7 @@ class Projects extends Controller
 {
     public function index(){
         if(auth()->user()){
-        $projects =  projectsModel::limit(2)->get();
+        $projects =  projectsModel::limit(3)->get();
         if(isset($projects)){
             return response()->json([
                 'state' => 1,
@@ -57,7 +57,7 @@ class Projects extends Controller
         if($createProject){
             return response()->json([
                 'state' => 1,
-                'msg' => 'project created succcessfully', 
+                'msg' => 'project created successfully', 
             ], 200);
         }else{
             return response()->json([
@@ -99,14 +99,15 @@ class Projects extends Controller
 
     }
 
-    public function deleteProject($id){
+    public function deleteProject(Request $request){
         if(auth()->user()){
-            $getProject = projectsModel::find($id);
-            $getProject->delete();
-            return response()->json([
-                'state' => 1,
-                'msg' => 'project deleted succssfully',
-            ], 200);
+        $getProject = projectsModel::find($request->itemId);
+        $getProject->delete();
+        return response()->json([
+            'state' => 1,
+            'msg' => 'project deleted successfully',
+        ], 200);
+        
         }else{
             return response()->json([
                 'state' => 0,
@@ -120,3 +121,12 @@ class Projects extends Controller
         return $transaction->transactions;
     }
 }
+
+/*
+$getProject = projectsModel::find($id);
+            $getProject->delete();
+            return response()->json([
+                'state' => 1,
+                'msg' => 'project deleted successfully',
+            ], 200);
+*/
