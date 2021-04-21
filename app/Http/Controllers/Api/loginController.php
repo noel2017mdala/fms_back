@@ -64,7 +64,7 @@ class loginController extends Controller
     ]);
 
         if($validate){
-            
+            //demo
             $userData = [
                 'email' => $request->email,
                 'password' => $request->password,
