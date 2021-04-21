@@ -36,12 +36,18 @@ class loginController extends Controller
         
 
         if($createUser){
-            return response()->json(['response' => 'User created successfully'], 201)
-                    ->header('Content-Type', 'application/json');
+
+             return response()->json([
+                'state' => 1,
+                'msg' => 'User created Successfully',
+            ], 201);
+
         }else{
 
-            return response()->json(['response' => 'failed to create user'], 500)
-            ->header('Content-Type', 'application/json');
+            return response()->json([
+                'state' => 0,
+                'msg' => 'failed to create user',
+            ], 401);
         }
     }else{
 
@@ -66,9 +72,11 @@ class loginController extends Controller
 
             if(auth()->attempt($userData)){
                 $user =  $request->user();
+                //return $user;
+                
                 $createToken = $user->createToken('user_auth_token')->accessToken;
-                $userInfo = User::get(['id', 'first_name', 'last_name','email']);
-
+                $userInfo = User::get(['id', 'first_name', 'last_name','email'])->where('id', $user->id);
+                
                 return response()->json([
                     'state' => 1,
                     'user' => 'Bearer',

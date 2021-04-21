@@ -46,9 +46,9 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('getamountbalance/{id?}', [AmountController::class, 'index']);
     Route::get('getAmount/{id?}', [AmountController::class, 'getAmountTransaction']);
+    Route::post('createamount', [AmountController::class, 'create_transaction']);
 });
 
-Route::post('createamount', [AmountController::class, 'create_transaction']);
 
 
 // Route::get('getamount', [AmountController::class, 'getAmount']);
