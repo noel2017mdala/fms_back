@@ -193,7 +193,7 @@ class TransactionController extends Controller
         if(auth()->user()){
 
             if(!empty($id)){
-
+//demo
                 $earnings = Transaction::where([
                     'transaction_type'=> 0,
                     'transaction_by' => $id,
