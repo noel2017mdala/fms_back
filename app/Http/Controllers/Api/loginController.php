@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use App\Models\Amount;
+use Illuminate\Support\Carbon;
 
 class loginController extends Controller
 {
@@ -37,11 +39,22 @@ class loginController extends Controller
 
         if($createUser){
 
-             return response()->json([
+            $createUserAmount =  Amount::create([
+                'user_id' => $createUser->id,
+                'Amount'  => 0,
+                'transaction_date' => Carbon::now(),
+            ]);
+
+           if($createUserAmount){
+
+            return response()->json([
                 'state' => 1,
                 'msg' => 'User created Successfully',
             ], 201);
 
+           }
+
+          
         }else{
 
             return response()->json([
@@ -72,11 +85,12 @@ class loginController extends Controller
 
             if(auth()->attempt($userData)){
                 $user =  $request->user();
-                //return $user;
+                //return $user->id;
                 
                 $createToken = $user->createToken('user_auth_token')->accessToken;
-                $userInfo = User::get(['id', 'first_name', 'last_name','email'])->where('id', $user->id);
-                
+                $userInfo = User::where('id', $user->id)->get();
+                //return $userInfo;
+
                 return response()->json([
                     'state' => 1,
                     'user' => 'Bearer',
